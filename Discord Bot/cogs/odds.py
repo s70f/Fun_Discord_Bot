@@ -55,7 +55,9 @@ class Odds(commands.Cog):
         await ctx.send(embed=choose)
 
         channel = ctx.channel
-
+        
+        #* --- Checks Number
+        
         def check2(m):
             return arg1 <= int(m.content) <= arg2 and m.channel == channel
 
@@ -71,7 +73,9 @@ class Odds(commands.Cog):
 
         if int(choice.content) != number:
             await channel.send(embed=safe)
-
+        
+        #* --- mute
+        
         elif int(choice.content) == number:
             muted = discord.Embed(
                 title='Odds Generator',
