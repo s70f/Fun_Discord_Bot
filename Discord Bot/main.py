@@ -1,7 +1,6 @@
 # import
 import discord
 from discord.ext import commands
-from discord.ext import tasks
 import os
 
 # intents
@@ -32,4 +31,4 @@ for filename in os.listdir('./cogs'):
         client.load_extension(f'cogs.{filename[:-3]}')
 
 
-client.run('TOKEN')
+client.run('Bot Token')
