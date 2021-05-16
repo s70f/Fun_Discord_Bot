@@ -15,13 +15,14 @@ class War(commands.Cog):
         if isinstance(error, commands.CommandOnCooldown):
             await ctx.send("please dont spam")
 
+    @commands.command()
     async def army(self, ctx):
         army = discord.Embed(
             colour=discord.Colour.blue()
         )
 
         army.set_footer(
-            text="Use '.attack' to attack your enemy")
+            text="Use '.attack' to attack your enemy or '.enemy' to see their army")
         army.set_thumbnail(url=ctx.author.avatar_url)
         army.add_field(
             name=f"Army Name", value=f"🔺 {ctx.author.display_name}'s Army", inline=False)
@@ -42,6 +43,7 @@ class War(commands.Cog):
 
         await ctx.send(embed=army)
 
+    @commands.command()
     async def enemy(self, ctx):
         enemy = discord.Embed(
             title="Bot's Army",
@@ -78,7 +80,6 @@ class War(commands.Cog):
 
             await self.army(ctx)
             await ctx.send("-" * 16)
-            await self.enemy(ctx)
 
     async def bot_attack(self, ctx):
         damage = random.randint(3, 9)
