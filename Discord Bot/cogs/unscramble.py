@@ -1,4 +1,3 @@
-import discord as discord
 from discord.ext import commands
 import csv
 import random
@@ -19,16 +18,13 @@ class Unscramble(commands.Cog):
         res = [''.join(sample(ele, len(ele))) for ele in test_list]
 
         a = random.choice(res)
-        print(a)
         list_word = list(a)
         random.shuffle(list_word)
         print(''.join(list_word))
 
         await ctx.send('Unscramble ' + '`' + ''.join(list_word) + '`')
-        print('working?')
 
         def check(m):
-            print(a, m, 'working?')
             return m.content == a
 
         msg = await self.client.wait_for('message', check=check)
