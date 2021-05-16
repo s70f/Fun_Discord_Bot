@@ -10,7 +10,7 @@ intents.members = True
 # command prefix
 client = commands.Bot(command_prefix='.')
 
-# load files 
+# load/unload files 
 
 @client.command()
 async def load(ctx, extension):
