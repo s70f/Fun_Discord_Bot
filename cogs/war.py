@@ -17,45 +17,51 @@ class War(commands.Cog):
 
     @commands.command()
     async def army(self, ctx):
-        army = discord.Embed(
-            colour=discord.Colour.blue()
-        )
+        if ctx.author.id not in self.data.keys():
+            await ctx.send("You have not started a battle yet. Use '.war' to start one")
+        else:
+            army = discord.Embed(
+                colour=discord.Colour.blue()
+            )
 
-        army.set_footer(
-            text="Use '.attack' to attack your enemy or '.enemy' to see their army")
-        army.set_thumbnail(url=ctx.author.avatar_url)
-        army.add_field(
-            name=f"Army Name", value=f"🔺 {ctx.author.display_name}'s Army", inline=False)
-        army.add_field(
-            name='Soldiers', value=f"🍢 {self.data[ctx.author.id]['soldiers_1']}", inline=False)
-        army.add_field(
-            name='Catapult Ammo', value=f"💣 {self.data[ctx.author.id]['ammo_1']}", inline=False)
-        army.add_field(
-            name='Cavalry', value='Disabled', inline=False)
-        army.add_field(
-            name='Pikeman', value='Disabled', inline=False)
-        army.add_field(
-            name='Shields', value='Disabled', inline=False)
-        army.add_field(
-            name='Damage Dealt', value=f"🔸 {self.data[ctx.author.id]['dealt']}", inline=False)
-        army.add_field(
-            name='Damage Taken', value=f"🔹 {self.data[ctx.author.id]['taken']}", inline=False)
+            army.set_footer(
+                text="Use '.attack' to attack your enemy or '.enemy' to see their army")
+            army.set_thumbnail(url=ctx.author.avatar_url)
+            army.add_field(
+                name=f"Army Name", value=f"🔺 {ctx.author.display_name}'s Army", inline=False)
+            army.add_field(
+                name='Soldiers', value=f"🍢 {self.data[ctx.author.id]['soldiers_1']}", inline=False)
+            army.add_field(
+                name='Catapult Ammo', value=f"💣 {self.data[ctx.author.id]['ammo_1']}", inline=False)
+            army.add_field(
+                name='Cavalry', value='Disabled', inline=False)
+            army.add_field(
+                name='Pikeman', value='Disabled', inline=False)
+            army.add_field(
+                name='Shields', value='Disabled', inline=False)
+            army.add_field(
+                name='Damage Dealt', value=f"🔸 {self.data[ctx.author.id]['dealt']}", inline=False)
+            army.add_field(
+                name='Damage Taken', value=f"🔹 {self.data[ctx.author.id]['taken']}", inline=False)
 
-        await ctx.send(embed=army)
+            await ctx.send(embed=army)
 
     @commands.command()
     async def enemy(self, ctx):
-        enemy = discord.Embed(
-            title="Bot's Army",
-            colour=discord.Colour.red()
-        )
+        if ctx.author.id not in self.data.keys():
+            await ctx.send("You have not started a battle yet. Use '.war' to start one")
+        else:
+            enemy = discord.Embed(
+                title="Bot's Army",
+                colour=discord.Colour.red()
+            )
 
-        enemy.add_field(
-            name='Soldiers', value=f"🍢 {self.data[self.game_id]['soldiers_2']}", inline=False)
-        enemy.add_field(
-            name='Catapult Ammo', value=f"💣 {self.data[self.game_id]['ammo_2']}", inline=False)
+            enemy.add_field(
+                name='Soldiers', value=f"🍢 {self.data[self.game_id]['soldiers_2']}", inline=False)
+            enemy.add_field(
+                name='Catapult Ammo', value=f"💣 {self.data[self.game_id]['ammo_2']}", inline=False)
 
-        await ctx.send(embed=enemy)
+            await ctx.send(embed=enemy)
 
     @commands.command()
     async def war(self, ctx):
@@ -118,6 +124,19 @@ class War(commands.Cog):
         else:
             await ctx.send("please use the `.war` command to start a battle")
 
-
+    @commands.group()
+    async def enable(self, ctx):
+        enable_help = discord.Embed(
+                title="War | Enable",
+                description="Use `.enable [type]` to enable different army types!",
+                colour=discord.Colour.gold()
+            )
+        enable_help.add_field(
+            name='Cavalry', value=f"Enables Cavalry: guaranteed +1 attack damage on every attack but sacrifices 10 soldiers", inline=False)
+        enable_help.add_field(
+            name='Pikeman', value=f"Enables Pikeman: +10 soldiers but -1 damage on every attack", inline=False)
+        enable_help.add_field(
+            name='Shields', value=f"Enables Shields: -1 damage taken on enemy attacks", inline=False)
+        await ctx.send(embed=enable_help)
 def setup(client):
     client.add_cog(War(client))
