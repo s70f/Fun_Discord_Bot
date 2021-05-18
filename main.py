@@ -29,9 +29,15 @@ async def unload(ctx, extension):
 
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
+        print(filename)
         client.load_extension(f'cogs.{filename[:-3]}')
 
-with open("data.txt", "r") as myfile:
-    data = myfile.read().splitlines()
+@client.event
+async def on_ready():
+    print("Bot is ready")
 
-# client.run(BOT_TOKEN)
+f = open("token.txt", "r")
+BOT_TOKEN = f.read() # I am 100 iq
+
+client.run(BOT_TOKEN)
+
