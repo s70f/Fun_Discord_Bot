@@ -94,8 +94,9 @@ class War(commands.Cog):
                             `{self.data[ctx.author.id]['soldiers_1']}` of your soldiers remain""",
             colour=discord.Colour.red()
         )
-
+        
         await ctx.send(embed=dmg)
+        self.data[ctx.author.id]['shields'] = False
 
     @commands.command()
     @commands.cooldown(1, 3, commands.BucketType.user)
@@ -138,7 +139,7 @@ class War(commands.Cog):
         enable_help.add_field(
             name='Pikeman', value=f"Enables Pikeman: +10 soldiers but -2 damage on every attack", inline=False)
         enable_help.add_field(
-            name='Shields', value=f"Enables Shields: -1 damage taken on enemy attacks", inline=False)
+            name='Shields', value=f"Enables Shields: sacrifices men from maining the catapults to hold 5 shields (-5 attack damage once and -1 ammo)", inline=False)
         await ctx.send(embed=enable_help)
 
     @enable.command()
@@ -159,13 +160,34 @@ class War(commands.Cog):
         self.data[ctx.author.id]['pikeman'] = True
         self.data[ctx.author.id]['soldiers_1'] += 10
 
-        cavalry_enable = discord.Embed(
+        pikeman_enable = discord.Embed(
                 title="War | Pikeman Enabled",
                 description="Enables Pikeman: +10 soldiers but -2 damage on every attack",
                 colour=discord.Colour.purple()
             )
 
-        await ctx.send(embed=cavalry_enable)
+        await ctx.send(embed=pikeman_enable)
+    @enable.command()
+    async def shields(self, ctx):
+        if self.data[ctx.author.id]['ammo_1'] > 0:
+            self.data[ctx.author.id]['shields'] = True
+            self.data[ctx.author.id]['ammo_1'] -= 1
 
+            shields_enable = discord.Embed(
+                    title="War | Shields Enabled",
+                    description="Enables Shields: sacrifices men from maining the catapults to hold 5 shields (-5 attack damage once and -1 ammo)",
+                    colour=discord.Colour.purple()
+                )
+
+            await ctx.send(embed=shields_enable)
+        else:
+            shields_disabled = discord.Embed(
+                    title="War | Shields Disabled",
+                    description="You dont have enough men",
+                    colour=discord.Colour.purple()
+                )
+
+            await ctx.send(embed=shields_disabled)
+            
 def setup(client):
     client.add_cog(War(client))
