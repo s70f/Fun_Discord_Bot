@@ -86,7 +86,7 @@ class War(commands.Cog):
 
     async def bot_attack(self, ctx):
         damage = random.randint(3, 9)
-        self.data[self.game_id]['soldiers_2'] -= damage
+        self.data[ctx.author.id]['soldiers_1'] -= damage
         self.data[ctx.author.id]['taken'] += damage
         dmg = discord.Embed(
             title="Take Cover!",
@@ -101,10 +101,12 @@ class War(commands.Cog):
     @commands.cooldown(1, 3, commands.BucketType.user)
     async def attack(self, ctx):
         if ctx.author.id in self.data.keys():
+            damage = random.randint(3, 9)
+            print(damage)
             if self.data[ctx.author.id]['cavalry'] == True:
-                damage = random.randint(3, 9) + 2
-            else:
-                damage = random.randint(3, 9)
+                damage += 2
+            elif self.data[ctx.author.id]['pikeman'] == True:
+                damage -= 2
             self.data[self.game_id]['soldiers_2'] -= damage
             self.data[ctx.author.id]['dealt'] += damage
             print(self.data)
@@ -134,7 +136,7 @@ class War(commands.Cog):
         enable_help.add_field(
             name='Cavalry', value=f"Enables Cavalry: guaranteed +2 attack damage on every attack but sacrifices 10 soldiers", inline=False)
         enable_help.add_field(
-            name='Pikeman', value=f"Enables Pikeman: +10 soldiers but -1 damage on every attack", inline=False)
+            name='Pikeman', value=f"Enables Pikeman: +10 soldiers but -2 damage on every attack", inline=False)
         enable_help.add_field(
             name='Shields', value=f"Enables Shields: -1 damage taken on enemy attacks", inline=False)
         await ctx.send(embed=enable_help)
@@ -147,6 +149,19 @@ class War(commands.Cog):
         cavalry_enable = discord.Embed(
                 title="War | Cavalry Enabled",
                 description="Enables Cavalry: guaranteed +2 attack damage on every attack but sells 10 of your soldiers for horses",
+                colour=discord.Colour.purple()
+            )
+
+        await ctx.send(embed=cavalry_enable)
+    
+    @enable.command()
+    async def pikeman(self, ctx):
+        self.data[ctx.author.id]['pikeman'] = True
+        self.data[ctx.author.id]['soldiers_1'] += 10
+
+        cavalry_enable = discord.Embed(
+                title="War | Pikeman Enabled",
+                description="Enables Pikeman: +10 soldiers but -2 damage on every attack",
                 colour=discord.Colour.purple()
             )
 
