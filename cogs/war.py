@@ -52,14 +52,15 @@ class War(commands.Cog):
             await ctx.send("You have not started a battle yet. Use '.war' to start one")
         else:
             enemy = discord.Embed(
-                title="Bot's Army",
+                # title="Bot's Army",
                 colour=discord.Colour.red()
             )
 
+            enemy.set_thumbnail(url='https://render.fineartamerica.com/images/images-profile-flow/400/images/artworkimages/mediumlarge/2/1-spartan-imad-ud-din.jpg')
             enemy.add_field(
-                name='Soldiers', value=f"🍢 {self.data[self.game_id]['soldiers_2']}", inline=False)
+                name='Soldiers', value=f"🍢 ┃ {self.data[self.game_id]['soldiers_2']}", inline=False)
             enemy.add_field(
-                name='Catapult Ammo', value=f"💣 {self.data[self.game_id]['ammo_2']}", inline=False)
+                name='Catapult Ammo', value=f"💣 ┃ {self.data[self.game_id]['ammo_2']}", inline=False)
 
             await ctx.send(embed=enemy)
 
@@ -167,6 +168,7 @@ class War(commands.Cog):
             )
 
         await ctx.send(embed=pikeman_enable)
+
     @enable.command()
     async def shields(self, ctx):
         if self.data[ctx.author.id]['ammo_1'] > 0:
@@ -188,6 +190,26 @@ class War(commands.Cog):
                 )
 
             await ctx.send(embed=shields_disabled)
-            
+    
+    @commands.command()
+    async def catapult(self, ctx):
+        if self.data[ctx.author.id]['ammo_1'] > 0:
+            damage = random.randint(5, 8)
+            self.data[ctx.author.id]['taken'] += damage
+            self.data[ctx.author.id]['soldiers_1'] -= damage
+            catapult_attack = discord.Embed(
+                title=f"Catapults | {self.data[ctx.author.id]['ammo_1'] - 1}",
+                description=f"Youve launched your catapults, you've taken out **{damage}** soldiers",
+                colour=discord.Colour.dark_blue()
+            )
+            await ctx.send(embed=catapult_attack)
+        else:
+            no_ammo = discord.Embed(
+                title="Out of Ammo",
+                description="You dont have enough ammo",
+                colour=discord.Colour.dark_blue()
+            )
+            await ctx.send(embed=no_ammo)
+
 def setup(client):
     client.add_cog(War(client))
