@@ -9,6 +9,7 @@ class War(commands.Cog):
     def __init__(self, client):
         self.client = client
         self.data = {}
+        self.recruitement = False
 
     # @commands.Cog.listener()
     # async def on_command_error(self, ctx, error):
@@ -109,6 +110,9 @@ class War(commands.Cog):
                 damage += 2
             elif self.data[ctx.author.id]['pikeman'] == True:
                 damage -= 2
+            elif self.recruitement == True:
+                damage -= 1
+                self.recruitement = False
             self.data[self.game_id]['soldiers_2'] -= damage
             self.data[ctx.author.id]['dealt'] += damage
             print(self.data)
@@ -121,7 +125,7 @@ class War(commands.Cog):
 
             await ctx.send(embed=dmg)
             await ctx.send("-" * 16)
-            time.sleep(2)
+            time.sleep(1)
 
             await self.bot_attack(ctx)
 
@@ -210,6 +214,17 @@ class War(commands.Cog):
                 colour=discord.Colour.dark_blue()
             )
             await ctx.send(embed=no_ammo)
-
+    
+    @commands.command()
+    async def recruit(self, ctx):
+        number = random.randint(4, 6)
+        self.recruitement = True
+        self.data[ctx.author.id]['soldiers_1'] += number
+        recruitement = discord.Embed(
+                title="Recruitement",
+                description=f"you have recruited {number} Soldiers from a nearby village, untrained soldiers will do -1 damage on first attack",
+                colour=discord.Colour.dark_blue()
+            )
+        await ctx.send(embed=recruitement)
 def setup(client):
     client.add_cog(War(client))
