@@ -21,7 +21,7 @@ class Battle(commands.Cog):
             self.id[ctx.author.id]['turn'] = False
 
     async def death(self, ctx):
-        if self.data[ctx.author.id]['soldiers'] <= 0:
+        if self.data[self.id[ctx.author.id]['enemy']]['soldiers'] <= 0:
             dead = discord.Embed(
                 title="Dead!",
                 description=f"It has been an honor fighting with you",
@@ -104,9 +104,9 @@ class Battle(commands.Cog):
             self.id[ctx.author.id] = True
 
             self.data[ctx.author.id] = {
-                'soldiers': random.randint(25, 40), 'dealt': 0, 'taken': 0, 'ammo': random.randint(1, 3), 'cavalry': False, 'pikeman': False, 'shields': False, 'rec': False}
+                'soldiers': random.randint(25, 40), 'dealt': 0, 'taken': 0, 'ammo': random.randint(1, 3), 'cavalry': False, 'pikeman': False, 'shields': False, 'rec': False, 'rage': 0}
             self.data[arg.id] = {
-                'soldiers': random.randint(25, 40), 'dealt': 0, 'taken': 0, 'ammo': random.randint(1, 3), 'cavalry': False, 'pikeman': False, 'shields': False, 'rec': False}
+                'soldiers': random.randint(25, 40), 'dealt': 0, 'taken': 0, 'ammo': random.randint(1, 3), 'cavalry': False, 'pikeman': False, 'shields': False, 'rec': False, 'rage': 0}
 
             await self.army(ctx)
     
@@ -126,34 +126,42 @@ class Battle(commands.Cog):
         else:
             await ctx.send("There is nothing to accept")
 
+    async def attack_type(self, ctx, damage) -> int:
+        if self.data[ctx.author.id]['cavalry'] == True: 
+            damage += 2
+        elif self.data[ctx.author.id]['pikeman'] == True:
+            damage -= 2
+        elif self.data[ctx.author.id]['rec'] == True:
+            damage -= 1
+            self.self.data[ctx.author.id]['rec'] = False
+
+    async def attack_damage(self, ctx, damage : int) -> int:
+        self.data[self.id[ctx.author.id]['enemy']]['soldiers'] -= damage
+        self.data[ctx.author.id]['dealt'] += damage
+        self.data[self.id[ctx.author.id]['enemy']]['taken'] += damage
+
     @commands.command()
     @commands.cooldown(1, 3, commands.BucketType.user)
     async def attack(self, ctx):
         if self.id[ctx.author.id]['turn'] == True:
             damage = random.randint(3, 6)
-            print(damage)
-            if self.data[ctx.author.id]['cavalry'] == True: 
-                damage += 2
-            elif self.data[ctx.author.id]['pikeman'] == True:
-                damage -= 2
-            elif self.data[ctx.author.id]['rec'] == True:
-                damage -= 1
-                self.self.data[ctx.author.id]['rec'] = False
-                #TODO: Change recruitment
 
-            self.data[self.id[ctx.author.id]['enemy']]['soldiers'] -= damage
-            self.data[ctx.author.id]['dealt'] += damage
-            self.data[self.id[ctx.author.id]['enemy']]['taken'] += damage
-            print(self.data)
+            await self.attack_type(ctx, damage)
+            await self.attack_damage(ctx, damage)
+
+            if damage > 4:
+                self.data[ctx.author.id]['rage'] += 1
+
             dmg = discord.Embed(
                 title="Attack!",
                 description=f"""**You killed** `{damage}` enemy soldiers
                                 You have killed a **total** of `{self.data[ctx.author.id]['dealt']}` enemy soldiers""",
                 colour=discord.Colour.orange()
             )
-
-            await self.turn(ctx)
+            
             await ctx.send(embed=dmg)
+            
+            await self.turn(ctx)
             await self.death(ctx)
 
         else:
@@ -174,7 +182,6 @@ class Battle(commands.Cog):
             enable_help.add_field(
                 name='Shields', value=f"Enables Shields: sacrifices men from maining the catapults to hold 5 shields (-5 attack damage once and -1 ammo)", inline=False)
             await ctx.send(embed=enable_help)
-            await self.turn(ctx)
         else:
             await ctx.send("You have not started a battle yet. Use '.war @mention' to start one")
 
@@ -257,12 +264,12 @@ class Battle(commands.Cog):
                 )
                 await ctx.send(embed=catapult_attack)
                 await self.turn(ctx)
-                await self.death(self, ctx)
+                await self.death(ctx)
             else:
                 no_ammo = discord.Embed(
                     title="Out of Ammo",
                     description="You dont have enough ammo",
-                    colour=discord.Colour.dark_blue()
+                    colour=discord.Colour.blue()
                 )
                 await ctx.send(embed=no_ammo)
     
@@ -281,21 +288,99 @@ class Battle(commands.Cog):
                 )
             await ctx.send(embed=recruitement)
 
+    @commands.group(invoke_without_command=True)
+    async def rage(self, ctx):
+        if self.id[ctx.author.id]['game'] == True:
+            rage_help = discord.Embed(
+                    title="War | Rage",
+                    description="Use `.rage [type]` to attack in full might",
+                    colour=discord.Colour.gold()
+                )
+            rage_help.add_field(
+                name='Level', value="Shows your rage level", inline=False)
+            rage_help.add_field(
+                name='Charge', value="Attack with a garanteed 6 damage", inline=False)
+            rage_help.add_field(
+                name='mission', value="Attempts to rescue soldiers (4-8)", inline=False)
+            await ctx.send(embed=rage_help)
+            
+        else:
+            await ctx.send("You have not started a battle yet. Use '.war @mention' to start one")
+
+    @rage.command()
+    async def level(self, ctx):
+        not_full = 6 - self.data[ctx.author.id]['rage']
+        full = "■ " * self.data[ctx.author.id]['rage']
+        rage_bar = discord.Embed(
+            title="Rage Level",
+            description= full + "□ " * not_full,
+            colour=discord.Colour.dark_red()
+        )
+        await ctx.send(embed=rage_bar)
+
+    @rage.command()
+    async def charge(self, ctx):
+        if self.data[ctx.author.id]['rage'] < 4:
+            not_rage = discord.Embed(
+                    title="Not Enough Rage",
+                    description="You need more rage",
+                    colour=discord.Colour.greyple()
+                )
+            await ctx.send(embed=not_rage)
+
+        else:
+            await self.attack_damage(ctx, 6)
+
+            rage_dmg = discord.Embed(
+                title="Charge!",
+                description=f"""You **Destroyed** 6 soldiers
+                                You have killed a **total** of `{self.data[ctx.author.id]['dealt']}` enemy soldiers""",
+                colour=discord.Colour.dark_red()
+            )
+            
+            await ctx.send(embed=rage_dmg)
+            self.data[ctx.author.id]['rage'] -= 1
+            await self.turn(ctx)
+            await self.death(ctx)
+    
+    @rage.command()
+    async def mission(self, ctx):
+        if self.data[ctx.author.id]['rage'] < 4:
+            not_rage = discord.Embed(
+                    title="Not Enough Rage",
+                    description="You need more rage",
+                    colour=discord.Colour.greyple()
+                )
+            await ctx.send(embed=not_rage)
+        
+        else:
+            amount = random.randint(4, 8)
+            rescue = discord.Embed(
+                title="Rescue",
+                description=f"""You rescued {amount}
+                                You have a **total** of `{self.data[ctx.author.id]['soldiers']}` soldiers""",
+                colour=discord.Colour.dark_red()
+            )
+
+            await ctx.send(embed=rescue)
+            self.data[ctx.author.id]['rage'] -= 1
+
     @commands.command()
     async def surrender(self, ctx):
         if self.id[ctx.author.id]['game'] == False:
             await ctx.send("You have not started a battle yet. Use '.war' to start one")
         else:
-            del self.id[self.id[ctx.author.id]['enemy']]
-            del self.id[ctx.author.id]
             del self.data[self.id[ctx.author.id]['enemy']]
+            del self.id[self.id[ctx.author.id]['enemy']]
             del self.data[ctx.author.id]
+            del self.id[ctx.author.id]
+
             surrendered = discord.Embed(
                 title="Surrender!",
                 description=f"It has been an honor fighting with you, ",
                 colour=discord.Colour.light_gray()
             )
             await ctx.send(embed=surrendered)
-
+    
 def setup(client):
     client.add_cog(Battle(client))
