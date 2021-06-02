@@ -126,15 +126,6 @@ class Battle(commands.Cog):
         else:
             await ctx.send("There is nothing to accept")
 
-    async def attack_type(self, ctx, damage) -> int:
-        if self.data[ctx.author.id]['cavalry'] == True: 
-            damage += 2
-        elif self.data[ctx.author.id]['pikeman'] == True:
-            damage -= 2
-        elif self.data[ctx.author.id]['rec'] == True:
-            damage -= 1
-            self.self.data[ctx.author.id]['rec'] = False
-
     async def attack_damage(self, ctx, damage : int) -> int:
         self.data[self.id[ctx.author.id]['enemy']]['soldiers'] -= damage
         self.data[ctx.author.id]['dealt'] += damage
@@ -145,13 +136,25 @@ class Battle(commands.Cog):
     async def attack(self, ctx):
         if self.id[ctx.author.id]['turn'] == True:
             damage = random.randint(3, 6)
+            print(damage)
+            if damage < 4:
+                self.data[ctx.author.id]['rage'] += 1
+            
+            if self.data[ctx.author.id]['cavalry'] == True and self.data[ctx.author.id]['pikeman'] == True:
+                damage += 0
+            elif self.data[ctx.author.id]['cavalry'] == True: 
+                damage += 2
+            elif self.data[ctx.author.id]['pikeman'] == True:
+                damage -= 2
+            elif self.data[ctx.author.id]['rec'] == True:
+                damage -= 1
+            elif self.data[ctx.author.id]['shields'] == True:
+                damage -= 1
 
-            await self.attack_type(ctx, damage)
+            self.data[ctx.author.id]['rec'] = False
             await self.attack_damage(ctx, damage)
 
-            if damage > 4:
-                self.data[ctx.author.id]['rage'] += 1
-
+            print(damage)
             dmg = discord.Embed(
                 title="Attack!",
                 description=f"""**You killed** `{damage}` enemy soldiers
@@ -207,17 +210,20 @@ class Battle(commands.Cog):
         if self.id[ctx.author.id]['turn'] == False:
             await ctx.send("You have not started a battle yet. Use '.war' to start one, or wait your turn")
         else:
-            self.data[ctx.author.id]['pikeman'] = True
-            self.data[ctx.author.id]['soldiers'] += 10
+            if self.data[ctx.author.id]['pikeman'] == False:
+                self.data[ctx.author.id]['pikeman'] = True
+                self.data[ctx.author.id]['soldiers'] += 10
 
-            pikeman_enable = discord.Embed(
-                    title="War | Pikeman Enabled",
-                    description="Enables Pikeman: +10 soldiers but -2 damage on every attack",
-                    colour=discord.Colour.purple()
-                )
+                pikeman_enable = discord.Embed(
+                        title="War | Pikeman Enabled",
+                        description="Enables Pikeman: +10 soldiers but -2 damage on every attack",
+                        colour=discord.Colour.purple()
+                    )
 
-            await ctx.send(embed=pikeman_enable)
-            await self.turn(ctx)
+                await ctx.send(embed=pikeman_enable)
+                await self.turn(ctx)
+            else:
+                ctx.send()
 
     @enable.command()
     async def shields(self, ctx):
@@ -227,6 +233,7 @@ class Battle(commands.Cog):
             if self.data[ctx.author.id]['ammo'] > 0:
                 self.data[ctx.author.id]['shields'] = True
                 self.data[ctx.author.id]['ammo'] -= 1
+                self.data[ctx.author.id]['soldiers'] += 5
 
                 shields_enable = discord.Embed( 
                         title="War | Shields Enabled",
@@ -272,21 +279,6 @@ class Battle(commands.Cog):
                     colour=discord.Colour.blue()
                 )
                 await ctx.send(embed=no_ammo)
-    
-    @commands.command()
-    async def recruit(self, ctx):
-        if self.id[ctx.author.id]['turn'] == False:
-            await ctx.send("You have not started a battle yet. Use '.war' to start one, or wait your turn")
-        else:
-            number = random.randint(4, 6)
-            self.self.data[ctx.author.id]['rec'] = True
-            self.data[ctx.author.id]['soldiers'] += number
-            recruitement = discord.Embed(
-                    title="Recruitement",
-                    description=f"you have recruited {number} Soldiers from a nearby village, untrained soldiers will do -1 damage on first attack",
-                    colour=discord.Colour.dark_blue()
-                )
-            await ctx.send(embed=recruitement)
 
     @commands.group(invoke_without_command=True)
     async def rage(self, ctx):
