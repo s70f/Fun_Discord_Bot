@@ -38,7 +38,7 @@ The market is where all the buying and selling happens. keep in mind prices for 
 Players can use start a battle against any player with the `.war @mention` command. Players start off with a random number of soldiers ranging from 30 - 40 *note: range can vary depending on the class. Players can choose their method of attack, normal attack, catapults, specialty, rage attack; or can choose to reinforce their army by having a rescue mission, recruiting soldiers from the catapults, or train new ones. Different classes have different perks and drawbacks. 
 
 ### Classes
-Players can choose between 4 classes before they start a battle.
+Players can choose between 4 classes before they start a battle by using `.class <type>`
 
 #### Marksmen
 An elite killing squad. Increases the maximum amount of damage you can deal by +1 but decrease the minimum amount of soldiers you start with by 5.
