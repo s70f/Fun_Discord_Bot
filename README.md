@@ -40,11 +40,15 @@ Players can use start a battle against any player with the `.war @mention` comma
 ### Classes
 Players can choose between 4 classes before they start a battle by using `.class <type>`
 
+#### Sniper
+An elite killing squad. Increases the maximum amount of damage you can deal by 1 but decrease the minimum amount of soldiers you start with by 5.
+
 #### Marksmen
-An elite killing squad. Increases the maximum amount of damage you can deal by +1 but decrease the minimum amount of soldiers you start with by 5.
+A band of ruthless soldiers who spray at any living thing. Decreases the maximum amount of damage you can deal by 1 but increases the minimum amount of soldiers you start with by 5.
+
 
 #### Infantry
-The infantry is specialized in combat on foot. This guarantees you, +5 soldiers, to start off with but doesn't allow you to enable cavalry and rage.
+The infantry is specialized in combat on foot. This guarantees you, +5 soldiers, to start off with but doesn't allow you to enable cavalry or use rage commands.
 
 #### Artillery
 Artillery is a class of heavy military ranged weapons built to launch munitions far beyond the range and power of infantry firearms. You start off with -6 soldiers but get 1 extra ammo and catapults from enemy deals -1 damage.
