@@ -104,9 +104,9 @@ class Battle(commands.Cog):
             self.id[ctx.author.id] = True
 
             self.data[ctx.author.id] = {
-                'soldiers': random.randint(25, 40), 'dealt': 0, 'taken': 0, 'ammo': random.randint(1, 3), 'cavalry': False, 'pikeman': False, 'shields': False, 'rec': False, 'rage': 0}
+                'soldiers': random.randint(30, 40), 'dealt': 0, 'taken': 0, 'ammo': random.randint(1, 3), 'cavalry': False, 'pikeman': False, 'shields': False, 'rec': False, 'rage': 0}
             self.data[arg.id] = {
-                'soldiers': random.randint(25, 40), 'dealt': 0, 'taken': 0, 'ammo': random.randint(1, 3), 'cavalry': False, 'pikeman': False, 'shields': False, 'rec': False, 'rage': 0}
+                'soldiers': random.randint(30, 40), 'dealt': 0, 'taken': 0, 'ammo': random.randint(1, 3), 'cavalry': False, 'pikeman': False, 'shields': False, 'rec': False, 'rage': 0}
 
             await self.army(ctx)
     
@@ -181,7 +181,7 @@ class Battle(commands.Cog):
             enable_help.add_field(
                 name='Cavalry', value=f"Enables Cavalry: guaranteed +2 attack damage on every attack but sacrifices 10 soldiers", inline=False)
             enable_help.add_field(
-                name='Pikeman', value=f"Enables Pikeman: +10 soldiers but -2 damage on every attack", inline=False)
+                name='Pikeman', value=f"Enables Pikeman: +6 soldiers but -2 damage on every attack", inline=False)
             enable_help.add_field(
                 name='Shields', value=f"Enables Shields: sacrifices men from maining the catapults to hold 5 shields (-5 attack damage once and -1 ammo)", inline=False)
             await ctx.send(embed=enable_help)
@@ -212,11 +212,11 @@ class Battle(commands.Cog):
         else:
             if self.data[ctx.author.id]['pikeman'] == False:
                 self.data[ctx.author.id]['pikeman'] = True
-                self.data[ctx.author.id]['soldiers'] += 10
+                self.data[ctx.author.id]['soldiers'] += 6
 
                 pikeman_enable = discord.Embed(
                         title="War | Pikeman Enabled",
-                        description="Enables Pikeman: +10 soldiers but -2 damage on every attack",
+                        description="Enables Pikeman: +6 soldiers but -2 damage on every attack",
                         colour=discord.Colour.purple()
                     )
 
@@ -291,9 +291,9 @@ class Battle(commands.Cog):
             rage_help.add_field(
                 name='Level', value="Shows your rage level", inline=False)
             rage_help.add_field(
-                name='Charge', value="Attack with a garanteed 6 damage", inline=False)
+                name='Charge', value="Attack with a garanteed 8 damage", inline=False)
             rage_help.add_field(
-                name='mission', value="Attempts to rescue soldiers (4-8)", inline=False)
+                name='mission', value="Attempts to rescue soldiers (6-8)", inline=False)
             await ctx.send(embed=rage_help)
             
         else:
@@ -312,7 +312,7 @@ class Battle(commands.Cog):
 
     @rage.command()
     async def charge(self, ctx):
-        if self.data[ctx.author.id]['rage'] < 4:
+        if self.data[ctx.author.id]['rage'] < 3:
             not_rage = discord.Embed(
                     title="Not Enough Rage",
                     description="You need more rage",
@@ -321,23 +321,23 @@ class Battle(commands.Cog):
             await ctx.send(embed=not_rage)
 
         else:
-            await self.attack_damage(ctx, 6)
+            await self.attack_damage(ctx, 8)
 
             rage_dmg = discord.Embed(
                 title="Charge!",
-                description=f"""You **Destroyed** 6 soldiers
+                description=f"""You **Destroyed** 8 soldiers
                                 You have killed a **total** of `{self.data[ctx.author.id]['dealt']}` enemy soldiers""",
                 colour=discord.Colour.dark_red()
             )
             
             await ctx.send(embed=rage_dmg)
-            self.data[ctx.author.id]['rage'] -= 1
+            self.data[ctx.author.id]['rage'] -= 3
             await self.turn(ctx)
             await self.death(ctx)
     
     @rage.command()
     async def mission(self, ctx):
-        if self.data[ctx.author.id]['rage'] < 4:
+        if self.data[ctx.author.id]['rage'] < 3:
             not_rage = discord.Embed(
                     title="Not Enough Rage",
                     description="You need more rage",
@@ -346,7 +346,7 @@ class Battle(commands.Cog):
             await ctx.send(embed=not_rage)
         
         else:
-            amount = random.randint(4, 8)
+            amount = random.randint(6, 8)
             rescue = discord.Embed(
                 title="Rescue",
                 description=f"""You rescued {amount}
@@ -355,7 +355,7 @@ class Battle(commands.Cog):
             )
 
             await ctx.send(embed=rescue)
-            self.data[ctx.author.id]['rage'] -= 1
+            self.data[ctx.author.id]['rage'] -= 3
 
     @commands.command()
     async def surrender(self, ctx):
@@ -372,6 +372,7 @@ class Battle(commands.Cog):
                 description=f"It has been an honor fighting with you, ",
                 colour=discord.Colour.light_gray()
             )
+            surrendered.set_footer(text=ctx.author.name)
             await ctx.send(embed=surrendered)
     
 def setup(client):
