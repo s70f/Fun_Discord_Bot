@@ -38,7 +38,7 @@ The market is where all the buying and selling happens. keep in mind prices for 
 Players can use start a battle against any player with the `.war @mention` command. Players start off with a random number of soldiers ranging from 30 - 40 *note: range can vary depending on the class. Players can choose their method of attack, normal attack, catapults, specialty, rage attack; or can choose to reinforce their army by having a rescue mission, recruiting soldiers from the catapults, or train new ones. Different classes have different perks and drawbacks. 
 
 ### Classes
-There are 4 main classes a player can choose from before they start a battle using `.class <type>`. Players can also unlock classes by buying or getting achievements. Use `.market class` to see available classes on sale. Use `.class` to see all the classes you are able to choose from.
+Players can choose between 4 classes before they start a battle by using `.class <type>`
 
 #### Sniper
 An elite killing squad. Increases the maximum amount of damage you can deal by 1 but decrease the minimum amount of soldiers you start with by 5.
@@ -52,5 +52,3 @@ The infantry is specialized in combat on foot. This guarantees you, +5 soldiers,
 
 #### Artillery
 Artillery is a class of heavy military ranged weapons built to launch munitions far beyond the range and power of infantry firearms. You start off with -6 soldiers but get 1 extra ammo and catapults from enemy deals -1 damage.
-
-
