@@ -135,9 +135,9 @@ class Battle(commands.Cog):
     @commands.cooldown(1, 3, commands.BucketType.user)
     async def attack(self, ctx):
         if self.id[ctx.author.id]['turn'] == True:
-            damage = random.randint(3, 6)
+            damage = random.randint(3, 10)
             print(damage)
-            if damage < 4:
+            if damage < 6:
                 self.data[ctx.author.id]['rage'] += 1
             
             if self.data[ctx.author.id]['cavalry'] == True and self.data[ctx.author.id]['pikeman'] == True:

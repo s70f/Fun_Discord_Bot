@@ -1,0 +1,25 @@
+{
+  "470649440072630273": {
+    "name": "Suhayb :(",
+    "wins": 0,
+    "class": "infantry",
+    "unlocked": [
+      "sniper",
+      "marksmen",
+      "artillery",
+      "infantry"
+    ]
+  },
+  "381887813806718978": {
+    "name": "Musa",
+    "wins": 0,
+    "losses": 100,
+    "class": "infantry",
+    "unlocked": [
+      "sniper",
+      "marksmen",
+      "artillery",
+      "infantry"
+    ]
+  }
+}
