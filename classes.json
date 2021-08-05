@@ -1,0 +1,149 @@
+{
+  "470649440072630273": {
+    "class": "artillery",
+    "unlocked": {
+      "sniper": {
+        "strength": "1/2",
+        "cost": 100,
+        "weakness": "1/2",
+        "stat1": -1,
+        "stat2": -5,
+        "range": [
+          25,
+          30
+        ]
+      },
+      "marksmen": {
+        "strength": "1/3",
+        "cost": 100,
+        "weakness": "1/3",
+        "stat1": 5,
+        "stat2": -1,
+        "range": [
+          35,
+          40
+        ]
+      },
+      "artillery": {
+        "strength": "1/3",
+        "cost": 100,
+        "weakness": "1/3",
+        "stat1": -1,
+        "stat2": -5,
+        "range": [
+          30,
+          35
+        ]
+      },
+      "infantry": {
+        "strength": "1/3",
+        "cost": 100,
+        "weakness": "1/3",
+        "stat1": -1,
+        "stat2": -5,
+        "range": [
+          40,
+          40
+        ]
+      }
+    }
+  },
+  "381887813806718978": {
+    "class": "infantry",
+    "unlocked": {
+      "sniper": {
+        "strength": "1/2",
+        "cost": 100,
+        "weakness": "1/2",
+        "stat1": -1,
+        "stat2": -5,
+        "range": [
+          25,
+          30
+        ]
+      },
+      "marksmen": {
+        "strength": "1/3",
+        "cost": 100,
+        "weakness": "1/3",
+        "stat1": 5,
+        "stat2": -1,
+        "range": [
+          35,
+          40
+        ]
+      },
+      "artillery": {
+        "strength": "1/3",
+        "cost": 100,
+        "weakness": "1/3",
+        "stat1": -1,
+        "stat2": -5,
+        "range": [
+          30,
+          35
+        ]
+      },
+      "infantry": {
+        "strength": "1/3",
+        "cost": 100,
+        "weakness": "1/3",
+        "stat1": -1,
+        "stat2": -5,
+        "range": [
+          40,
+          40
+        ]
+      }
+    }
+  },
+  "765733601781219348": {
+    "class": "infantry",
+    "unlocked": {
+      "sniper": {
+        "strength": "1/2",
+        "cost": 100,
+        "weakness": "1/2",
+        "stat1": -1,
+        "stat2": -5,
+        "range": [
+          25,
+          30
+        ]
+      },
+      "marksmen": {
+        "strength": "1/3",
+        "cost": 100,
+        "weakness": "1/3",
+        "stat1": 5,
+        "stat2": -1,
+        "range": [
+          35,
+          40
+        ]
+      },
+      "artillery": {
+        "strength": "1/3",
+        "cost": 100,
+        "weakness": "1/3",
+        "stat1": -1,
+        "stat2": -5,
+        "range": [
+          30,
+          35
+        ]
+      },
+      "infantry": {
+        "strength": "1/3",
+        "cost": 100,
+        "weakness": "1/3",
+        "stat1": -1,
+        "stat2": -5,
+        "range": [
+          40,
+          40
+        ]
+      }
+    }
+  }
+}

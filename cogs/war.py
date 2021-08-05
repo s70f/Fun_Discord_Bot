@@ -1,7 +1,7 @@
 import discord as discord
 from discord.ext import commands
 import random
-import time
+import json
 
 
 class Battle(commands.Cog):
@@ -48,6 +48,8 @@ class Battle(commands.Cog):
                 name='Soldiers', value=f"🍢 {self.data[ctx.author.id]['soldiers']}", inline=False)
             army.add_field(
                 name='Catapult Ammo', value=f"💣 {self.data[ctx.author.id]['ammo']}", inline=False)
+            army.add_field(
+                name='Credits', value=f"💸 {self.data[ctx.author.id]['credits']}", inline=False)
             army.add_field(
                 name='Cavalry', value=self.data[ctx.author.id]['cavalry'], inline=False)
             army.add_field(
@@ -101,13 +103,17 @@ class Battle(commands.Cog):
         if ctx.author.id in self.id.keys():
             await ctx.send('You have already started a battle')
         else:
+            with open('classes.json', 'r', encoding="utf8") as user_id:
+                data = json.load(user_id)
+            
+            num_range_0 = data[str(ctx.author.id)]['unlocked'][data[str(ctx.author.id)]["class"]]["range"]
+            num_range_1 = data[str(arg.id)]['unlocked'][data[str(arg.id)]["class"]]["range"]
             self.id[ctx.author.id] = True
-
             self.data[ctx.author.id] = {
-                'soldiers': random.randint(30, 40), 'dealt': 0, 'taken': 0, 'ammo': random.randint(1, 3), 'cavalry': False, 'pikeman': False, 'shields': False, 'rec': False, 'rage': 0}
+                'soldiers': random.randint(num_range_0[0], num_range_0[1]), 'credits': 100, 'dealt': 0, 'taken': 0, 'ammo': random.randint(1, 3), 'cavalry': False, 'pikeman': False, 'shields': False, 'rec': False, 'rage': 0}
             self.data[arg.id] = {
-                'soldiers': random.randint(30, 40), 'dealt': 0, 'taken': 0, 'ammo': random.randint(1, 3), 'cavalry': False, 'pikeman': False, 'shields': False, 'rec': False, 'rage': 0}
-
+                'soldiers': random.randint(num_range_1[0], num_range_1[0]), 'credits': 100, 'dealt': 0, 'taken': 0, 'ammo': random.randint(1, 3), 'cavalry': False, 'pikeman': False, 'shields': False, 'rec': False, 'rage': 0}
+            print(self.data)
             await self.army(ctx)
     
     @commands.command()
@@ -135,28 +141,28 @@ class Battle(commands.Cog):
     @commands.cooldown(1, 3, commands.BucketType.user)
     async def attack(self, ctx):
         if self.id[ctx.author.id]['turn'] == True:
-            damage = random.randint(3, 10)
+            damage = random.randint(2, 5)
             print(damage)
-            if damage < 6:
-                self.data[ctx.author.id]['rage'] += 1
+            # if damage < 4:
+            #     self.data[ctx.author.id]['rage'] += 1
             
-            if self.data[ctx.author.id]['cavalry'] == True and self.data[ctx.author.id]['pikeman'] == True:
-                damage += 0
-            elif self.data[ctx.author.id]['cavalry'] == True: 
-                damage += 2
-            elif self.data[ctx.author.id]['pikeman'] == True:
-                damage -= 2
-            elif self.data[ctx.author.id]['rec'] == True:
-                damage -= 1
-            elif self.data[ctx.author.id]['shields'] == True:
-                damage -= 1
+            # if self.data[ctx.author.id]['cavalry'] == True and self.data[ctx.author.id]['pikeman'] == True:
+            #     damage += 0
+            # elif self.data[ctx.author.id]['cavalry'] == True: 
+            #     damage += 2
+            # elif self.data[ctx.author.id]['pikeman'] == True:
+            #     damage -= 2
+            # elif self.data[ctx.author.id]['rec'] == True:
+            #     damage -= 1
+            # elif self.data[ctx.author.id]['shields'] == True:
+            #     damage -= 1
 
             self.data[ctx.author.id]['rec'] = False
             await self.attack_damage(ctx, damage)
 
             print(damage)
             dmg = discord.Embed(
-                title="Attack!",
+                title="Light Attack",
                 description=f"""**You killed** `{damage}` enemy soldiers
                                 You have killed a **total** of `{self.data[ctx.author.id]['dealt']}` enemy soldiers""",
                 colour=discord.Colour.orange()
@@ -374,6 +380,26 @@ class Battle(commands.Cog):
             )
             surrendered.set_footer(text=ctx.author.name)
             await ctx.send(embed=surrendered)
+
+    @commands.command()
+    async def void(self, ctx):
+        if self.id[ctx.author.id] == True:
+            del self.data[ctx.author.id]
+            del self.id[ctx.author.id]
+
+            voided = discord.Embed(
+                title="Voided",
+                description=f"You have voided this game",
+                colour=discord.Colour.light_gray()
+            )
+            voided.set_footer(text=ctx.author.name)
+            await ctx.send(embed=voided)
+
+        elif self.id[ctx.author.id]['game'] == True:
+             await ctx.send("You have already started a battle. Use '.surrender' if you want to give up")
+             
+        else:
+            await ctx.send("You have not started a battle yet. Use '.war' to start one")
     
 def setup(client):
     client.add_cog(Battle(client))
