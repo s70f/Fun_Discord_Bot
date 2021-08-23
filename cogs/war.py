@@ -51,12 +51,6 @@ class Battle(commands.Cog):
                 name='Catapult Ammo', value=f"💣 {self.data[ctx.author.id]['ammo']}", inline=False)
             army.add_field(
                 name='Credits', value=f"💸 {self.data[ctx.author.id]['credits']}", inline=False)
-            # army.add_field(
-            #     name='Cavalry', value=self.data[ctx.author.id]['cavalry'], inline=False)
-            # army.add_field(
-            #     name='Pikeman', value=self.data[ctx.author.id]['pikeman'], inline=False)
-            # army.add_field(
-            #     name='Shields', value=self.data[ctx.author.id]['shields'], inline=False)
             army.add_field(
                 name='Damage Dealt', value=f"🔸 {self.data[ctx.author.id]['dealt']}", inline=False)
             army.add_field(
@@ -74,7 +68,7 @@ class Battle(commands.Cog):
 
             enemy = discord.Embed(
                 # title="Bot's Army",
-                colour=discord.Colour.red()
+                colour=discord.Colour.dark_teal()
             )
 
             enemy.set_footer(
@@ -86,12 +80,6 @@ class Battle(commands.Cog):
                 name='Soldiers', value=f"🍢 {self.data[arg.id]['soldiers']}", inline=False)
             enemy.add_field(
                 name='Catapult Ammo', value=f"💣 {self.data[arg.id]['ammo']}", inline=False)
-            # enemy.add_field(
-            #     name='Cavalry', value=self.data[arg.id]['cavalry'], inline=False)
-            # enemy.add_field(
-            #     name='Pikeman', value=self.data[arg.id]['pikeman'], inline=False)
-            # enemy.add_field(
-            #     name='Shields', value=self.data[arg.id]['shields'], inline=False)
             enemy.add_field(
                 name='Damage Dealt', value=f"🔸 {self.data[arg.id]['dealt']}", inline=False)
             enemy.add_field(
@@ -137,7 +125,7 @@ class Battle(commands.Cog):
             accepted = discord.Embed(
                 title="Ready the Army",
                 description=f"You have accepted {arg.mention}s War request. Use `.army` to view your army",
-                colour=discord.Colour.dark_red()
+                colour=discord.Colour.dark_teal()
             )
             await ctx.send(embed=accepted)
         else:
@@ -156,15 +144,6 @@ class Battle(commands.Cog):
 
             if damage < 4:
                 self.data[ctx.author.id]['rage'] += 1
-
-            # if self.data[ctx.author.id]['cavalry'] == True and self.data[ctx.author.id]['pikeman'] == True:
-            #     damage += 0
-            # elif self.data[ctx.author.id]['cavalry'] == True:
-            #     damage += 2
-            # elif self.data[ctx.author.id]['pikeman'] == True:
-            #     damage -= 2
-            # elif self.data[ctx.author.id]['shields'] == True:
-            #     damage -= 1
 
             self.data[ctx.author.id]['rec'] = False
             await self.attack_damage(ctx, damage)
@@ -203,7 +182,7 @@ class Battle(commands.Cog):
                     title="Heavy Attack",
                     description=f"""**You killed** `{damage}` enemy soldiers
                                     You have killed a **total** of `{self.data[ctx.author.id]['dealt']}` enemy soldiers""",
-                    colour=discord.Colour.orange()
+                    colour=discord.Colour.dark_orange()
                 )
 
                 await ctx.send(embed=dmg)
@@ -226,10 +205,10 @@ class Battle(commands.Cog):
                 self.data[ctx.author.id]['credits'] -= 10 * number
 
                 dmg = discord.Embed(
-                    title="Heavy Attack",
+                    title="Assassins in the Dark!",
                     description=f"""**You killed** `{number}` enemy soldiers
                                     You used `{10 * number}` Credits to higher {number} assassins""",
-                    colour=discord.Colour.orange()
+                    colour=discord.Colour.purple()
                 )
 
                 if number > 1:
@@ -267,7 +246,7 @@ class Battle(commands.Cog):
                     no_ammo = discord.Embed(
                         title="Out of Ammo",
                         description="You dont have enough ammo",
-                        colour=discord.Colour.blue()
+                        colour=discord.Colour.dark_blue()
                     )
                     await ctx.send(embed=no_ammo)
             else:
@@ -285,7 +264,7 @@ class Battle(commands.Cog):
                 dmg = discord.Embed(
                     title="Surprise Attack",
                     description="You sent a squadron of soldiers to flank the enemy",
-                    colour=discord.Colour.orange()
+                    colour=discord.Colour.gold()
                 )
                 dmg.add_field(
                     name='Coordinates', value="The coordinates are four differenct numbers ranging from 1 to 10", inline=False)
@@ -331,87 +310,7 @@ class Battle(commands.Cog):
         else:
             await ctx.send("please use the `.war` command to start a battle, or wait your turn")
 
-    # @commands.group(invoke_without_command=True)
-    # async def enable(self, ctx):
-    #     if self.id[ctx.author.id]['game'] == True:
-    #         enable_help = discord.Embed(
-    #                 title="War | Enable",
-    #                 description="Use `.enable [type]` to enable different army types!",
-    #                 colour=discord.Colour.gold()
-    #             )
-    #         enable_help.add_field(
-    #             name='Cavalry', value=f"Enables Cavalry: guaranteed +2 attack damage on every attack but sacrifices 10 soldiers", inline=False)
-    #         enable_help.add_field(
-    #             name='Pikeman', value=f"Enables Pikeman: +6 soldiers but -2 damage on every attack", inline=False)
-    #         enable_help.add_field(
-    #             name='Shields', value=f"Enables Shields: sacrifices men from maining the catapults to hold 5 shields (-5 attack damage once and -1 ammo)", inline=False)
-    #         await ctx.send(embed=enable_help)
-    #     else:
-    #         await ctx.send("You have not started a battle yet. Use '.war @mention' to start one")
-
-    # @enable.command()
-    # async def cavalry(self, ctx):
-    #     if self.id[ctx.author.id]['turn'] == False:
-    #         await ctx.send("You have not started a battle yet. Use '.war' to start one, or wait your turn")
-    #     else:
-    #         self.data[ctx.author.id]['cavalry'] = True
-    #         self.data[ctx.author.id]['soldiers'] -= 10
-
-    #         cavalry_enable = discord.Embed(
-    #                 title="War | Cavalry Enabled",
-    #                 description="Enables Cavalry: guaranteed +2 attack damage on every attack but sells 10 of your soldiers for horses",
-    #                 colour=discord.Colour.purple()
-    #             )
-
-    #         await ctx.send(embed=cavalry_enable)
-    #         await self.turn(ctx)
-
-    # @enable.command()
-    # async def pikeman(self, ctx):
-    #     if self.id[ctx.author.id]['turn'] == False:
-    #         await ctx.send("You have not started a battle yet. Use '.war' to start one, or wait your turn")
-    #     else:
-    #         if self.data[ctx.author.id]['pikeman'] == False:
-    #             self.data[ctx.author.id]['pikeman'] = True
-    #             self.data[ctx.author.id]['soldiers'] += 6
-
-    #             pikeman_enable = discord.Embed(
-    #                     title="War | Pikeman Enabled",
-    #                     description="Enables Pikeman: +6 soldiers but -2 damage on every attack",
-    #                     colour=discord.Colour.purple()
-    #                 )
-
-    #             await ctx.send(embed=pikeman_enable)
-    #             await self.turn(ctx)
-    #         else:
-    #             ctx.send()
-
-    # @enable.command()
-    # async def shields(self, ctx):
-    #     if self.id[ctx.author.id]['turn'] == False:
-    #         await ctx.send("You have not started a battle yet. Use '.war' to start one, or wait your turn")
-    #     else:
-    #         if self.data[ctx.author.id]['ammo'] > 0:
-    #             self.data[ctx.author.id]['shields'] = True
-    #             self.data[ctx.author.id]['ammo'] -= 1
-    #             self.data[ctx.author.id]['soldiers'] += 5
-
-    #             shields_enable = discord.Embed(
-    #                     title="War | Shields Enabled",
-    #                     description="Enables Shields: sacrifices men from maining the catapults to hold 5 shields (-5 attack damage once and -1 ammo)",
-    #                     colour=discord.Colour.purple()
-    #                 )
-
-    #             await ctx.send(embed=shields_enable)
-    #             await self.turn(ctx)
-    #         else:
-    #             shields_disabled = discord.Embed(
-    #                     title="War | Shields Disabled",
-    #                     description="You dont have enough men",
-    #                     colour=discord.Colour.purple()
-    #                 )
-
-    #             await ctx.send(embed=shields_disabled)
+    ###################################################################################################################################################
 
     @commands.group(invoke_without_command=True)
     async def rage(self, ctx):
