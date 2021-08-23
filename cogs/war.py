@@ -11,15 +11,15 @@ class Battle(commands.Cog):
         self.data = {}
         self.id = {}
         self.market = {}
-        
+
     # @commands.Cog.listener()
     # async def on_command_error(self, ctx, error):
     #     if isinstance(error, commands.CommandOnCooldown):
     #         await ctx.send("please dont spam")
 
     async def turn(self, ctx):
-            self.id[self.id[ctx.author.id]['enemy']]['turn'] = True
-            self.id[ctx.author.id]['turn'] = False
+        self.id[self.id[ctx.author.id]['enemy']]['turn'] = True
+        self.id[ctx.author.id]['turn'] = False
 
     async def death(self, ctx):
         if self.data[self.id[ctx.author.id]['enemy']]['soldiers'] <= 0:
@@ -29,7 +29,7 @@ class Battle(commands.Cog):
                 colour=discord.Colour.dark_red()
             )
             await ctx.send(embed=dead)
-    
+
     @commands.command()
     async def army(self, ctx):
         if ctx.author.id not in self.data.keys():
@@ -71,7 +71,7 @@ class Battle(commands.Cog):
         else:
 
             arg = self.id[ctx.author.id]['enemy_user']
-            
+
             enemy = discord.Embed(
                 # title="Bot's Army",
                 colour=discord.Colour.red()
@@ -96,21 +96,25 @@ class Battle(commands.Cog):
                 name='Damage Dealt', value=f"🔸 {self.data[arg.id]['dealt']}", inline=False)
             enemy.add_field(
                 name='Damage Taken', value=f"🔹 {self.data[arg.id]['taken']}", inline=False)
-            
+
             await ctx.send(embed=enemy)
 
     @commands.command(aliases=['w'])
-    async def war(self, ctx, arg : discord.Member):
+    async def war(self, ctx, arg: discord.Member):
         if ctx.author.id in self.id.keys():
             await ctx.send('You have already started a battle')
         else:
             with open('classes.json', 'r', encoding="utf8") as user_id:
                 self.class_data = json.load(user_id)
-            
-            num_range_0 = self.class_data[str(ctx.author.id)]['unlocked'][self.class_data[str(ctx.author.id)]["class"]]["range"]
-            num_credits_0 = self.class_data[str(ctx.author.id)]['unlocked'][self.class_data[str(ctx.author.id)]["class"]]["credits"]
-            num_range_1 = self.class_data[str(arg.id)]['unlocked'][self.class_data[str(arg.id)]["class"]]["range"]
-            num_credits_1 = self.class_data[str(arg.id)]['unlocked'][self.class_data[str(arg.id)]["class"]]["credits"]
+
+            num_range_0 = self.class_data[str(
+                ctx.author.id)]['unlocked'][self.class_data[str(ctx.author.id)]["class"]]["range"]
+            num_credits_0 = self.class_data[str(
+                ctx.author.id)]['unlocked'][self.class_data[str(ctx.author.id)]["class"]]["credits"]
+            num_range_1 = self.class_data[str(
+                arg.id)]['unlocked'][self.class_data[str(arg.id)]["class"]]["range"]
+            num_credits_1 = self.class_data[str(
+                arg.id)]['unlocked'][self.class_data[str(arg.id)]["class"]]["credits"]
 
             self.id[ctx.author.id] = True
             self.data[ctx.author.id] = {
@@ -119,15 +123,17 @@ class Battle(commands.Cog):
                 'soldiers': random.randint(num_range_1[0], num_range_1[0]), 'credits': num_credits_1, 'dealt': 0, 'taken': 0, 'ammo': random.randint(1, 3), 'cavalry': False, 'pikeman': False, 'shields': False, 'rage': 0}
             print(self.data)
             await self.army(ctx)
-    
+
     @commands.command(aliases=['a'])
-    async def accept(self, ctx, arg : discord.Member):
+    async def accept(self, ctx, arg: discord.Member):
         if self.id[arg.id] == True:
-            self.id[ctx.author.id] = {'enemy': arg.id, 'enemy_user': arg, 'game': True, 'turn': False}
-            self.id[arg.id] = {'enemy': ctx.author.id, 'enemy_user': ctx.author, 'game': True, 'turn': True}  
+            self.id[ctx.author.id] = {
+                'enemy': arg.id, 'enemy_user': arg, 'game': True, 'turn': False}
+            self.id[arg.id] = {'enemy': ctx.author.id,
+                               'enemy_user': ctx.author, 'game': True, 'turn': True}
             game_id = ctx.author.id + arg.id
             self.market[game_id] = {"light": 5, "heavy": 20, "catapault": 25}
-            
+
             accepted = discord.Embed(
                 title="Ready the Army",
                 description=f"You have accepted {arg.mention}s War request. Use `.army` to view your army",
@@ -137,7 +143,7 @@ class Battle(commands.Cog):
         else:
             await ctx.send("There is nothing to accept")
 
-    async def attack_damage(self, ctx, damage : int) -> int:
+    async def attack_damage(self, ctx, damage: int) -> int:
         self.data[self.id[ctx.author.id]['enemy']]['soldiers'] -= damage
         self.data[ctx.author.id]['dealt'] += damage
         self.data[self.id[ctx.author.id]['enemy']]['taken'] += damage
@@ -150,10 +156,10 @@ class Battle(commands.Cog):
 
             if damage < 4:
                 self.data[ctx.author.id]['rage'] += 1
-            
+
             # if self.data[ctx.author.id]['cavalry'] == True and self.data[ctx.author.id]['pikeman'] == True:
             #     damage += 0
-            # elif self.data[ctx.author.id]['cavalry'] == True: 
+            # elif self.data[ctx.author.id]['cavalry'] == True:
             #     damage += 2
             # elif self.data[ctx.author.id]['pikeman'] == True:
             #     damage -= 2
@@ -170,9 +176,9 @@ class Battle(commands.Cog):
                                 You have killed a **total** of `{self.data[ctx.author.id]['dealt']}` enemy soldiers""",
                 colour=discord.Colour.orange()
             )
-            
+
             await ctx.send(embed=dmg)
-            
+
             await self.turn(ctx)
             await self.death(ctx)
 
@@ -199,9 +205,9 @@ class Battle(commands.Cog):
                                     You have killed a **total** of `{self.data[ctx.author.id]['dealt']}` enemy soldiers""",
                     colour=discord.Colour.orange()
                 )
-                
+
                 await ctx.send(embed=dmg)
-                
+
                 await self.turn(ctx)
                 await self.death(ctx)
             else:
@@ -233,7 +239,7 @@ class Battle(commands.Cog):
                 await self.death(ctx)
             else:
                 await ctx.send("You dont have enough credits")
-            
+
         else:
             await ctx.send("please use the `.war` command to start a battle, or wait your turn")
 
@@ -266,41 +272,56 @@ class Battle(commands.Cog):
                     await ctx.send(embed=no_ammo)
             else:
                 ctx.send("Not enough credits")
-    
+
     @attack.command()
     @commands.cooldown(1, 3, commands.BucketType.user)
     async def surprise(self, ctx):
         if self.id[ctx.author.id]['turn'] == True:
-            if self.data[ctx.author.id]['credits'] >= 25: 
+            if self.data[ctx.author.id]['credits'] >= 25:
                 numbers = random.sample(range(10), 4)
 
                 self.data[ctx.author.id]['credits'] -= 25
 
                 dmg = discord.Embed(
                     title="Surprise Attack",
-                    description="You sent a squadron of soldiers to flank the enemy\nThe coordinates are four differenct numbers ranging from 1 to 10\n pray that the enemy doesnt guess the coordinates",
+                    description="You sent a squadron of soldiers to flank the enemy",
                     colour=discord.Colour.orange()
                 )
-                dmg.set_footer(text="opponent has to guess the coordinates ex. `1 4 6 9`")
+                dmg.add_field(
+                    name='Coordinates', value="The coordinates are four differenct numbers ranging from 1 to 10", inline=False)
+                dmg.add_field(
+                    name='Strength', value="For each coordinate the enemy does not guess you do 3 damage", inline=False)
+                dmg.add_field(
+                    name='Vulnerabilty', value="For each coordinate the enemy guesses they get 10 credits", inline=False)
+                dmg.set_footer(
+                    text="opponent has to guess the coordinates ex. `1 4 6 9`")
                 await ctx.send(embed=dmg)
                 await self.turn(ctx)
 
                 msg = []
+
                 def check(m):
                     return m.author == self.id[ctx.author.id]['enemy_user'] and m.channel == ctx.channel
-                    
+
                 msg = await self.client.wait_for('message', check=check)
                 msg = list(msg.content)
                 msg = list(filter(lambda x: x != ' ', msg))
                 msg = [int(i) for i in msg]
                 print(msg)
-                
+
                 guessed = (len(set(msg).intersection(set(numbers))))
+                print(guessed)
                 guess = discord.Embed(
                     title="Coordinates",
-                    description=f"The coordinates you gave were {msg}, and the accualt coordinates were `{numbers}`\n You guessed `{guessed}` of the coordinates right!\nyou earned `{10 * guessed}`` credits and took `{4 - guessed}`` damage",
+                    description=f"Your scouts just arrived and told you the coordinates were **{numbers}**",
                     colour=discord.Colour.orange()
                 )
+                guess.add_field(
+                    name='Coordinates', value=f"The coordinates you guessed are **{msg}**", inline=False)
+                guess.add_field(
+                    name='Earned', value=f"You earned `{10 * guessed}` credits", inline=False)
+                guess.add_field(
+                    name='Earned', value=f"You took `{(4 - guessed) * 3}` damage", inline=False)
 
                 await ctx.send(embed=guess)
                 await self.attack_damage(ctx, (4 - guessed) * 3)
@@ -329,7 +350,7 @@ class Battle(commands.Cog):
     #         await ctx.send("You have not started a battle yet. Use '.war @mention' to start one")
 
     # @enable.command()
-    # async def cavalry(self, ctx): 
+    # async def cavalry(self, ctx):
     #     if self.id[ctx.author.id]['turn'] == False:
     #         await ctx.send("You have not started a battle yet. Use '.war' to start one, or wait your turn")
     #     else:
@@ -344,7 +365,7 @@ class Battle(commands.Cog):
 
     #         await ctx.send(embed=cavalry_enable)
     #         await self.turn(ctx)
-    
+
     # @enable.command()
     # async def pikeman(self, ctx):
     #     if self.id[ctx.author.id]['turn'] == False:
@@ -375,7 +396,7 @@ class Battle(commands.Cog):
     #             self.data[ctx.author.id]['ammo'] -= 1
     #             self.data[ctx.author.id]['soldiers'] += 5
 
-    #             shields_enable = discord.Embed( 
+    #             shields_enable = discord.Embed(
     #                     title="War | Shields Enabled",
     #                     description="Enables Shields: sacrifices men from maining the catapults to hold 5 shields (-5 attack damage once and -1 ammo)",
     #                     colour=discord.Colour.purple()
@@ -396,10 +417,10 @@ class Battle(commands.Cog):
     async def rage(self, ctx):
         if self.id[ctx.author.id]['game'] == True:
             rage_help = discord.Embed(
-                    title="War | Rage",
-                    description="Use `.rage [type]` to attack in full might",
-                    colour=discord.Colour.gold()
-                )
+                title="War | Rage",
+                description="Use `.rage [type]` to attack in full might",
+                colour=discord.Colour.gold()
+            )
             rage_help.add_field(
                 name='Level', value="Shows your rage level", inline=False)
             rage_help.add_field(
@@ -407,7 +428,7 @@ class Battle(commands.Cog):
             rage_help.add_field(
                 name='mission', value="Attempts to rescue soldiers (6-8)", inline=False)
             await ctx.send(embed=rage_help)
-            
+
         else:
             await ctx.send("You have not started a battle yet. Use '.war @mention' to start one")
 
@@ -417,7 +438,7 @@ class Battle(commands.Cog):
         full = "■ " * self.data[ctx.author.id]['rage']
         rage_bar = discord.Embed(
             title="Rage Level",
-            description= full + "□ " * not_full,
+            description=full + "□ " * not_full,
             colour=discord.Colour.dark_red()
         )
         await ctx.send(embed=rage_bar)
@@ -426,10 +447,10 @@ class Battle(commands.Cog):
     async def charge(self, ctx):
         if self.data[ctx.author.id]['rage'] < 3:
             not_rage = discord.Embed(
-                    title="Not Enough Rage",
-                    description="You need more rage",
-                    colour=discord.Colour.greyple()
-                )
+                title="Not Enough Rage",
+                description="You need more rage",
+                colour=discord.Colour.greyple()
+            )
             await ctx.send(embed=not_rage)
 
         else:
@@ -441,22 +462,22 @@ class Battle(commands.Cog):
                                 You have killed a **total** of `{self.data[ctx.author.id]['dealt']}` enemy soldiers""",
                 colour=discord.Colour.dark_red()
             )
-            
+
             await ctx.send(embed=rage_dmg)
             self.data[ctx.author.id]['rage'] -= 3
             await self.turn(ctx)
             await self.death(ctx)
-    
+
     @rage.command()
     async def mission(self, ctx):
         if self.data[ctx.author.id]['rage'] < 3:
             not_rage = discord.Embed(
-                    title="Not Enough Rage",
-                    description="You need more rage",
-                    colour=discord.Colour.greyple()
-                )
+                title="Not Enough Rage",
+                description="You need more rage",
+                colour=discord.Colour.greyple()
+            )
             await ctx.send(embed=not_rage)
-        
+
         else:
             amount = random.randint(6, 8)
             rescue = discord.Embed(
@@ -502,10 +523,11 @@ class Battle(commands.Cog):
             await ctx.send(embed=voided)
 
         elif self.id[ctx.author.id]['game'] == True:
-             await ctx.send("You have already started a battle. Use '.surrender' if you want to give up")
-             
+            await ctx.send("You have already started a battle. Use '.surrender' if you want to give up")
+
         else:
             await ctx.send("You have not started a battle yet. Use '.war' to start one")
-    
+
+
 def setup(client):
     client.add_cog(Battle(client))

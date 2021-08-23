@@ -10,7 +10,8 @@ intents.members = True
 # command prefix
 client = commands.Bot(command_prefix='.')
 
-# load/unload files 
+# load/unload files
+
 
 @client.command()
 async def load(ctx, extension):
@@ -19,7 +20,7 @@ async def load(ctx, extension):
 
 @client.command()
 async def reload(ctx, extension):
-    client.unload_extension(f'cogs.{extension}')     
+    client.unload_extension(f'cogs.{extension}')
     client.load_extension(f'cogs.{extension}')
 
 
@@ -32,12 +33,12 @@ for filename in os.listdir('./cogs'):
         print(filename)
         client.load_extension(f'cogs.{filename[:-3]}')
 
+
 @client.event
 async def on_ready():
     print("Bot is ready")
 
 f = open("token.txt", "r")
-BOT_TOKEN = f.read() # I am 100 iq
+BOT_TOKEN = f.read()  # I am 100 iq
 
 client.run(BOT_TOKEN)
-
