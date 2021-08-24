@@ -2,6 +2,8 @@ import discord as discord
 from discord.ext import commands
 import random
 import json
+from discord_slash import SlashCommand, SlashContext, cog_ext
+from discord_slash.utils.manage_commands import create_choice, create_option
 
 
 class Battle(commands.Cog):
@@ -11,7 +13,6 @@ class Battle(commands.Cog):
         self.data = {}
         self.id = {}
         self.market = {}
-
     # @commands.Cog.listener()
     # async def on_command_error(self, ctx, error):
     #     if isinstance(error, commands.CommandOnCooldown):
@@ -30,8 +31,12 @@ class Battle(commands.Cog):
             )
             await ctx.send(embed=dead)
 
+    # @cog_ext.cog_slash(name="Army", description="Shows your army in your current battle", guild_ids=[872981627570114561])
+    # async def view_army(self, ctx: SlashContext):
+    #     await self.army(ctx)
+
     @commands.command()
-    async def army(self, ctx):
+    async def army(self, ctx: SlashContext):
         if ctx.author.id not in self.data.keys():
             await ctx.send("You have not started a battle yet. Use '.war' to start one")
         else:
@@ -282,10 +287,16 @@ class Battle(commands.Cog):
                 def check(m):
                     return m.author == self.id[ctx.author.id]['enemy_user'] and m.channel == ctx.channel
 
-                msg = await self.client.wait_for('message', check=check)
-                msg = list(msg.content)
-                msg = list(filter(lambda x: x != ' ', msg))
-                msg = [int(i) for i in msg]
+                while True:
+                    msg = await self.client.wait_for('message', check=check)
+                    msg = list(msg.content)
+                    msg = list(filter(lambda x: x != ' ', msg))
+                    try:
+                        msg = [int(i) for i in msg]
+                        break
+                    except ValueError:
+                        await ctx.send("That is not a valid response")
+
                 print(msg)
 
                 guessed = (len(set(msg).intersection(set(numbers))))

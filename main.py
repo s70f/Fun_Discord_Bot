@@ -3,12 +3,16 @@ import discord
 from discord.ext import commands
 import os
 
+from discord_slash import SlashCommand, SlashContext
+from discord_slash.utils.manage_commands import create_choice, create_option
+
 # intents
 intents = discord.Intents.all()
 intents.members = True
 
 # command prefix
 client = commands.Bot(command_prefix='.')
+slash = SlashCommand(client, sync_commands=True)
 
 # load/unload files
 
