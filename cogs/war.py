@@ -18,6 +18,7 @@ class Battle(commands.Cog):
     #     if isinstance(error, commands.CommandOnCooldown):
     #         await ctx.send("please dont spam")
 
+    @commands.command(aliases=['m'])
     async def market(self, ctx):
         market = discord.Embed(
             title="Market",
@@ -33,13 +34,16 @@ class Battle(commands.Cog):
             name="Catapults", value=f"💸 {self.market[self.game_id]['catapult']}", inline=False)
         market.add_field(
             name="Assassins", value=f"💸 {self.market[self.game_id]['assassin']}", inline=False)
+        await ctx.send(embed=market)
 
     async def turn(self, ctx):
         self.id[self.id[ctx.author.id]['enemy']]['turn'] = True
         self.id[ctx.author.id]['turn'] = False
 
         self.market[self.game_id] = {
-            "light": random.randint(3, 10), "heavy": random.randint(15, 30), "catapault": random.randint(30, 50), "assassin": random.randint(6, 14)}
+            "light": random.randint(3, 10), "heavy": random.randint(15, 30), "catapult": random.randint(30, 50), "assassin": random.randint(6, 14)}
+
+        await self.market(ctx)
 
     async def death(self, ctx):
         if self.data[self.id[ctx.author.id]['enemy']]['soldiers'] <= 0:
@@ -119,14 +123,20 @@ class Battle(commands.Cog):
             with open('classes.json', 'r', encoding="utf8") as user_id:
                 self.class_data = json.load(user_id)
 
-            num_range = self.class_data[str(
+            num_range_0 = self.class_data[str(
                 ctx.author.id)]['unlocked'][self.class_data[str(ctx.author.id)]["class"]]["range"]
-            num_credits = self.class_data[str(
+            num_credits_0 = self.class_data[str(
                 ctx.author.id)]['unlocked'][self.class_data[str(ctx.author.id)]["class"]]["credits"]
+            num_range_1 = self.class_data[str(
+                arg.id)]['unlocked'][self.class_data[str(arg.id)]["class"]]["range"]
+            num_credits_1 = self.class_data[str(
+                arg.id)]['unlocked'][self.class_data[str(arg.id)]["class"]]["credits"]
 
             self.id[ctx.author.id] = True
             self.data[ctx.author.id] = {
-                'soldiers': random.randint(num_range[0], num_range[1]), 'credits': num_credits, 'dealt': 0, 'taken': 0, 'ammo': random.randint(1, 3), 'cavalry': False, 'pikeman': False, 'shields': False, 'rage': 0}
+                'soldiers': random.randint(num_range_0[0], num_range_0[1]), 'credits': num_credits_0, 'dealt': 0, 'taken': 0, 'ammo': random.randint(1, 3), 'cavalry': False, 'pikeman': False, 'shields': False, 'rage': 0}
+            self.data[arg.id] = {
+                'soldiers': random.randint(num_range_1[0], num_range_1[0]), 'credits': num_credits_1, 'dealt': 0, 'taken': 0, 'ammo': random.randint(1, 3), 'cavalry': False, 'pikeman': False, 'shields': False, 'rage': 0}
             print(self.data)
             await self.army(ctx)
 
@@ -138,17 +148,8 @@ class Battle(commands.Cog):
             self.id[arg.id] = {'enemy': ctx.author.id,
                                'enemy_user': ctx.author, 'game': True, 'turn': True}
             self.game_id = ctx.author.id + arg.id
-
             self.market[self.game_id] = {
-                "light": 5, "heavy": 20, "catapault": 25, "assassin": 1}
-
-            num_range = self.class_data[str(
-                ctx.author.id)]['unlocked'][self.class_data[str(ctx.author.id)]["class"]]["range"]
-            num_credits = self.class_data[str(
-                ctx.author.id)]['unlocked'][self.class_data[str(ctx.author.id)]["class"]]["credits"]
-
-            self.data[arg.id] = {
-                'soldiers': random.randint(num_range[0], num_range[0]), 'credits': num_credits, 'dealt': 0, 'taken': 0, 'ammo': random.randint(1, 3), 'cavalry': False, 'pikeman': False, 'shields': False, 'rage': 0}
+                "light": 5, "heavy": 20, "catapult": 25, "assassin": 10}
 
             accepted = discord.Embed(
                 title="Ready the Army",
@@ -177,7 +178,7 @@ class Battle(commands.Cog):
                     self.data[ctx.author.id]['rage'] += 1
 
                 self.data[ctx.author.id]['rec'] = False
-                await self.attack_damage(ctx, damage)
+                await self.attack_damage(ctx, 5)
 
                 print(damage)
                 dmg = discord.Embed(
@@ -187,7 +188,7 @@ class Battle(commands.Cog):
                     colour=discord.Colour.orange()
                 )
                 dmg.set_footer(
-                    text=f"You used {self.market[self.game_id]['light']}")
+                    text=f"You used {self.market[self.game_id]['light']} Credits")
                 await ctx.send(embed=dmg)
 
                 await self.turn(ctx)
@@ -218,7 +219,7 @@ class Battle(commands.Cog):
                     colour=discord.Colour.dark_orange()
                 )
                 dmg.set_footer(
-                    text=f"You used {self.market[self.game_id]['heavy']}")
+                    text=f"You used {self.market[self.game_id]['heavy']} Credits")
                 await ctx.send(embed=dmg)
 
                 await self.turn(ctx)
@@ -245,7 +246,7 @@ class Battle(commands.Cog):
                     colour=discord.Colour.purple()
                 )
                 dmg.set_footer(
-                    text=f"You used {self.market[self.game_id]['assassin']}")
+                    text=f"You used {self.market[self.game_id]['assassin']} Credits")
                 if number > 1:
                     await self.turn(ctx)
 
@@ -275,7 +276,7 @@ class Battle(commands.Cog):
                         colour=discord.Colour.dark_blue()
                     )
                     dmg.set_footer(
-                        text=f"You used {self.market[self.game_id]['catapult']}")
+                        text=f"You used {self.market[self.game_id]['catapult']} Credits")
                     await ctx.send(embed=dmg)
                     await self.turn(ctx)
                     await self.death(ctx)
@@ -312,7 +313,7 @@ class Battle(commands.Cog):
                 dmg.set_footer(
                     text="opponent has to guess the coordinates ex. `1 4 6 9`")
                 dmg.set_footer(
-                    text=f"You used {self.market[self.game_id]['surprise']}")
+                    text=f"You used {self.market[self.game_id]['surprise']} Credits")
                 await ctx.send(embed=dmg)
                 await self.turn(ctx)
 
