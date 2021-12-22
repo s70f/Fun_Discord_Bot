@@ -20,20 +20,13 @@ class Battle(commands.Cog):
 
     @commands.command(aliases=['m'])
     async def market(self, ctx):
+
         market = discord.Embed(
             title="Market",
-            descrition="Here you will find all your attack prices",
+            description=f"Light Attack: `💸 {self.market[self.game_id]['light']}`\nHeavy Attack: `💸 {self.market[self.game_id]['heavy']}`\nCatapult: `💸 {self.market[self.game_id]['catapult']}`\nAssassin: `💸 {self.market[self.game_id]['assassin']}`",
             colour=discord.Colour.dark_green()
         )
 
-        market.add_field(
-            name="Light Attack", value=f"💸 {self.market[self.game_id]['light']}", inline=False)
-        market.add_field(
-            name="Heavy Attack", value=f"💸 {self.market[self.game_id]['heavy']}", inline=False)
-        market.add_field(
-            name="Catapults", value=f"💸 {self.market[self.game_id]['catapult']}", inline=False)
-        market.add_field(
-            name="Assassins", value=f"💸 {self.market[self.game_id]['assassin']}", inline=False)
         await ctx.send(embed=market)
 
     async def turn(self, ctx):
@@ -388,52 +381,52 @@ class Battle(commands.Cog):
         )
         await ctx.send(embed=rage_bar)
 
-    @rage.command()
-    async def charge(self, ctx):
-        if self.data[ctx.author.id]['rage'] < 3:
-            not_rage = discord.Embed(
-                title="Not Enough Rage",
-                description="You need more rage",
-                colour=discord.Colour.greyple()
-            )
-            await ctx.send(embed=not_rage)
+    # @rage.command()
+    # async def charge(self, ctx):
+    #     if self.data[ctx.author.id]['rage'] < 3:
+    #         not_rage = discord.Embed(
+    #             title="Not Enough Rage",
+    #             description="You need more rage",
+    #             colour=discord.Colour.greyple()
+    #         )
+    #         await ctx.send(embed=not_rage)
 
-        else:
-            await self.attack_damage(ctx, 8)
+    #     else:
+    #         await self.attack_damage(ctx, 8)
 
-            rage_dmg = discord.Embed(
-                title="Charge!",
-                description=f"""You **Destroyed** 8 soldiers
-                                You have killed a **total** of `{self.data[ctx.author.id]['dealt']}` enemy soldiers""",
-                colour=discord.Colour.dark_red()
-            )
+    #         rage_dmg = discord.Embed(
+    #             title="Charge!",
+    #             description=f"""You **Destroyed** 8 soldiers
+    #                             You have killed a **total** of `{self.data[ctx.author.id]['dealt']}` enemy soldiers""",
+    #             colour=discord.Colour.dark_red()
+    #         )
 
-            await ctx.send(embed=rage_dmg)
-            self.data[ctx.author.id]['rage'] -= 3
-            await self.turn(ctx)
-            await self.death(ctx)
+    #         await ctx.send(embed=rage_dmg)
+    #         self.data[ctx.author.id]['rage'] -= 3
+    #         await self.turn(ctx)
+    #         await self.death(ctx)
 
-    @rage.command()
-    async def mission(self, ctx):
-        if self.data[ctx.author.id]['rage'] < 3:
-            not_rage = discord.Embed(
-                title="Not Enough Rage",
-                description="You need more rage",
-                colour=discord.Colour.greyple()
-            )
-            await ctx.send(embed=not_rage)
+    # @rage.command()
+    # async def mission(self, ctx):
+    #     if self.data[ctx.author.id]['rage'] < 3:
+    #         not_rage = discord.Embed(
+    #             title="Not Enough Rage",
+    #             description="You need more rage",
+    #             colour=discord.Colour.greyple()
+    #         )
+    #         await ctx.send(embed=not_rage)
 
-        else:
-            amount = random.randint(6, 8)
-            rescue = discord.Embed(
-                title="Rescue",
-                description=f"""You rescued {amount}
-                                You have a **total** of `{self.data[ctx.author.id]['soldiers']}` soldiers""",
-                colour=discord.Colour.dark_red()
-            )
+    #     else:
+    #         amount = random.randint(6, 8)
+    #         rescue = discord.Embed(
+    #             title="Rescue",
+    #             description=f"""You rescued {amount}
+    #                             You have a **total** of `{self.data[ctx.author.id]['soldiers']}` soldiers""",
+    #             colour=discord.Colour.dark_red()
+    #         )
 
-            await ctx.send(embed=rescue)
-            self.data[ctx.author.id]['rage'] -= 3
+    #         await ctx.send(embed=rescue)
+    #         self.data[ctx.author.id]['rage'] -= 3
 
     @commands.command()
     async def surrender(self, ctx):
