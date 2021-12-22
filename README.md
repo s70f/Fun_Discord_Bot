@@ -53,4 +53,6 @@ The infantry is specialized in combat on foot. This guarantees you, +5 soldiers,
 #### Artillery
 Artillery is a class of heavy military ranged weapons built to launch munitions far beyond the range and power of infantry firearms. You start off with -6 soldiers but get 1 extra ammo and catapults from enemy deals -1 damage.
 
+## Next Phase
+Make a credit system where you have to buy different types of soldiers and save credits and get credits for winning
 
