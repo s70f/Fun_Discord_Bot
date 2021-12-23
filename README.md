@@ -47,7 +47,7 @@ The default attack, `.attack light` does 2-5 damage and costs 3-10 credits
 `.attack poison` coming soon
 
 ### Market
-The `.market` is where players can look at the price of attacks. Each turn, the market changes price. Make sure to choose wisely.
+The `.market` is where players can look at the price of attacks. Each turn, the market changes prices. Make sure to choose wisely.
 
 ### Gold
 Gold can be obtained by winning duels. To calculate the amount of gold you get per win just take the number of soldiers you have left and add 10 to that. 
@@ -56,17 +56,16 @@ Gold can be obtained by winning duels. To calculate the amount of gold you get p
 There are 4 main classes a player can choose from before they start a battle using `.main class <type>`. Players can also unlock classes by buying or getting achievements. Use `.market class` to see different classes available for purchase. Use `.main classes` to see all the classes you are able to choose from.
 
 #### Sniper
-An elite killing squad. Increases the maximum amount of damage you can deal by 1 but decrease the minimum amount of soldiers you start with by 5.
+An elite killing squad. Start with 150 Credits and 35 to 40 soldiers. 
 
 #### Marksmen
-A band of ruthless soldiers who spray at any living thing. Decreases the maximum amount of damage you can deal by 1 but increases the minimum amount of soldiers you start with by 5.
-
+A band of ruthless soldiers who spray at any living thing. Start with 100 Credits and 40 to 45 soldiers. 
 
 #### Infantry
-The infantry is specialized in combat on foot. This guarantees you, +5 soldiers, to start off with but doesn't allow you to enable cavalry or use rage commands.
+The infantry is specialized in combat on foot. Start with 50 Credits and 50 soldiers. 
 
 #### Artillery
-Artillery is a class of heavy military ranged weapons built to launch munitions far beyond the range and power of infantry firearms. You start off with -6 soldiers but get 1 extra ammo and catapults from enemy deals -1 damage.
+Artillery is a class of heavy military ranged weapons built to launch munitions far beyond the range and power of infantry firearms. Start with 175 Credits and 30 to 35 soldiers.
 
 ## Next Phase
 Make a credit system where you have to buy different types of soldiers and save credits and get credits for winning
