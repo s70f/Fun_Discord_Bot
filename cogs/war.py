@@ -23,7 +23,7 @@ class Battle(commands.Cog):
 
         market = discord.Embed(
             title="Market",
-            description=f"Light Attack: `💸 {self.market[self.game_id]['light']}`\nHeavy Attack: `💸 {self.market[self.game_id]['heavy']}`\nCatapult: `💸 {self.market[self.game_id]['catapult']}`\nAssassin: `💸 {self.market[self.game_id]['assassin']}`",
+            description=f"Light Attack: `💸 {self.market[self.game_id]['light']}`\nHeavy Attack: `💸 {self.market[self.game_id]['heavy']}`\nCatapult: `💸 {self.market[self.game_id]['catapult']}`\nAssassin: `💸 {self.market[self.game_id]['assassin']}`\nSurprise: `💸 {self.market[self.game_id]['surprise']}`",
             colour=discord.Colour.dark_green()
         )
 
@@ -34,18 +34,34 @@ class Battle(commands.Cog):
         self.id[ctx.author.id]['turn'] = False
 
         self.market[self.game_id] = {
-            "light": random.randint(3, 10), "heavy": random.randint(15, 30), "catapult": random.randint(30, 50), "assassin": random.randint(6, 14)}
-
-        await self.market(ctx)
+            "light": random.randint(3, 10), "heavy": random.randint(10, 20), "catapult": random.randint(30, 50), "assassin": random.randint(6, 14), "surprise": random.randint(10, 15)}
 
     async def death(self, ctx):
         if self.data[self.id[ctx.author.id]['enemy']]['soldiers'] <= 0:
+            calc = self.data[self.id[ctx.author.id]['enemy']]['soldiers'] + 10
+            calc += self.data[ctx.author.id]['soldiers']
+
+            gold = discord.Embed(
+                title="Reward!",
+                description=f"{ctx.author.display_name} recieves {calc} gold for his victory",
+                colour=discord.Colour.gold()
+            )
+
             dead = discord.Embed(
                 title="Dead!",
                 description=f"It has been an honor fighting with you",
                 colour=discord.Colour.dark_red()
             )
             await ctx.send(embed=dead)
+            await ctx.send('Calculating Rewards...')
+            with open('classes.json', 'r', encoding="utf8") as user_id:
+                data = json.load(user_id)
+                data[str(ctx.author.id)]['stats']['gold'] = calc
+                data[str(ctx.author.id)]['stats']['wins'] += 1
+                with open('classes.json', 'w') as user_id:
+                    json.dump(data, user_id, indent=2)
+
+            await ctx.send(embed=gold)
 
     @cog_ext.cog_slash(name="Army", description="Shows your army in your current battle", guild_ids=[872981627570114561])
     async def view_army(self, ctx: SlashContext):
@@ -142,7 +158,7 @@ class Battle(commands.Cog):
                                'enemy_user': ctx.author, 'game': True, 'turn': True}
             self.game_id = ctx.author.id + arg.id
             self.market[self.game_id] = {
-                "light": 5, "heavy": 20, "catapult": 25, "assassin": 10}
+                "light": random.randint(3, 10), "heavy": random.randint(15, 30), "catapult": random.randint(30, 50), "assassin": random.randint(6, 14), "surprise": random.randint(10, 30)}
 
             accepted = discord.Embed(
                 title="Ready the Army",
@@ -196,7 +212,7 @@ class Battle(commands.Cog):
     async def heavy(self, ctx):
         if self.id[ctx.author.id]['turn'] == True:
             if self.data[ctx.author.id]['credits'] >= self.market[self.game_id]['heavy']:
-                damage = random.randint(6, 9)
+                damage = random.randint(16, 19)
 
                 if damage < 7:
                     self.data[ctx.author.id]['rage'] += 1
@@ -281,12 +297,14 @@ class Battle(commands.Cog):
                     )
                     await ctx.send(embed=no_ammo)
             else:
-                ctx.send("Not enough credits")
+                await ctx.send("Not enough credits")
 
     @attack.command()
     @commands.cooldown(1, 3, commands.BucketType.user)
     async def surprise(self, ctx):
         if self.id[ctx.author.id]['turn'] == True:
+            print(self.data[ctx.author.id]['credits'])
+            print(self.market[self.game_id]['surprise'])
             if self.data[ctx.author.id]['credits'] >= self.market[self.game_id]['surprise']:
                 numbers = random.sample(range(10), 4)
 
@@ -300,7 +318,7 @@ class Battle(commands.Cog):
                 dmg.add_field(
                     name='Coordinates', value="The coordinates are four differenct numbers ranging from 1 to 10", inline=False)
                 dmg.add_field(
-                    name='Strength', value="For each coordinate the enemy does not guess you do 3 damage", inline=False)
+                    name='Strength', value="For each coordinate the enemy does not guess you do 4 damage", inline=False)
                 dmg.add_field(
                     name='Vulnerabilty', value="For each coordinate the enemy guesses they get 10 credits", inline=False)
                 dmg.set_footer(
@@ -342,7 +360,7 @@ class Battle(commands.Cog):
                     name='Earned', value=f"You took `{(4 - guessed) * 3}` damage", inline=False)
 
                 await ctx.send(embed=guess)
-                await self.attack_damage(ctx, (4 - guessed) * 3)
+                await self.attack_damage(ctx, (4 - guessed) * 4)
                 await self.death(ctx)
             else:
                 ctx.send("Not enough credits")

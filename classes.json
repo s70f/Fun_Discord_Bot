@@ -3,23 +3,17 @@
     "class": "artillery",
     "unlocked": {
       "sniper": {
-        "strength": "1/2",
-        "cost": 100,
-        "weakness": "1/2",
-        "stat1": -1,
-        "stat2": -5,
+        "cred_ups": 0,
+        "range_ups": 0,
         "credits": 150,
         "range": [
-          30,
-          35
+          35,
+          40
         ]
       },
       "marksmen": {
-        "strength": "1/3",
-        "cost": 100,
-        "weakness": "1/3",
-        "stat1": 5,
-        "stat2": -1,
+        "cred_ups": 0,
+        "range_ups": 0,
         "credits": 100,
         "range": [
           40,
@@ -27,52 +21,45 @@
         ]
       },
       "artillery": {
-        "strength": "1/3",
-        "cost": 100,
-        "weakness": "1/3",
-        "stat1": -1,
-        "stat2": -5,
-        "credits": 100,
+        "cred_ups": 0,
+        "range_ups": 0,
+        "credits": 175,
         "range": [
-          35,
-          40
+          30,
+          35
         ]
       },
       "infantry": {
-        "strength": "1/3",
-        "cost": 100,
-        "weakness": "1/3",
-        "stat1": -1,
-        "stat2": -5,
-        "credits": 75,
+        "cred_ups": 0,
+        "range_ups": 0,
+        "credits": 50,
         "range": [
-          45,
-          45
+          50,
+          50
         ]
       }
+    },
+    "stats": {
+      "wins": 0,
+      "losses": 0,
+      "gold": 0
     }
   },
   "765733601781219348": {
-    "class": "artillery",
+    "class": "infantry",
     "unlocked": {
       "sniper": {
-        "strength": "1/2",
-        "cost": 100,
-        "weakness": "1/2",
-        "stat1": -1,
-        "stat2": -5,
+        "cred_ups": 0,
+        "range_ups": 0,
         "credits": 150,
         "range": [
-          30,
-          35
+          35,
+          40
         ]
       },
       "marksmen": {
-        "strength": "1/3",
-        "cost": 100,
-        "weakness": "1/3",
-        "stat1": 5,
-        "stat2": -1,
+        "cred_ups": 0,
+        "range_ups": 0,
         "credits": 100,
         "range": [
           40,
@@ -80,52 +67,45 @@
         ]
       },
       "artillery": {
-        "strength": "1/3",
-        "cost": 100,
-        "weakness": "1/3",
-        "stat1": -1,
-        "stat2": -5,
-        "credits": 100,
+        "cred_ups": 0,
+        "range_ups": 0,
+        "credits": 175,
         "range": [
-          35,
-          40
+          30,
+          35
         ]
       },
       "infantry": {
-        "strength": "1/3",
-        "cost": 100,
-        "weakness": "1/3",
-        "stat1": -1,
-        "stat2": -5,
-        "credits": 75,
+        "cred_ups": 0,
+        "range_ups": 0,
+        "credits": 50,
         "range": [
-          45,
-          45
+          50,
+          50
         ]
       }
+    },
+    "stats": {
+      "wins": 0,
+      "losses": 0,
+      "gold": 39
     }
   },
   "381887813806718978": {
-    "class": "sniper",
+    "class": "infantry",
     "unlocked": {
       "sniper": {
-        "strength": "1/2",
-        "cost": 100,
-        "weakness": "1/2",
-        "stat1": -1,
-        "stat2": -5,
+        "cred_ups": 0,
+        "range_ups": 0,
         "credits": 150,
         "range": [
-          30,
-          35
+          35,
+          40
         ]
       },
       "marksmen": {
-        "strength": "1/3",
-        "cost": 100,
-        "weakness": "1/3",
-        "stat1": 5,
-        "stat2": -1,
+        "cred_ups": 0,
+        "range_ups": 0,
         "credits": 100,
         "range": [
           40,
@@ -133,29 +113,74 @@
         ]
       },
       "artillery": {
-        "strength": "1/3",
-        "cost": 100,
-        "weakness": "1/3",
-        "stat1": -1,
-        "stat2": -5,
-        "credits": 100,
+        "cred_ups": 0,
+        "range_ups": 0,
+        "credits": 175,
+        "range": [
+          30,
+          35
+        ]
+      },
+      "infantry": {
+        "cred_ups": 0,
+        "range_ups": 0,
+        "credits": 50,
+        "range": [
+          50,
+          50
+        ]
+      }
+    },
+    "stats": {
+      "wins": 0,
+      "losses": 0,
+      "gold": 0
+    }
+  },
+  "642516364938051585": {
+    "class": "infantry",
+    "unlocked": {
+      "sniper": {
+        "cred_ups": 0,
+        "range_ups": 0,
+        "credits": 150,
         "range": [
           35,
           40
         ]
       },
-      "infantry": {
-        "strength": "1/3",
-        "cost": 100,
-        "weakness": "1/3",
-        "stat1": -1,
-        "stat2": -5,
-        "credits": 75,
+      "marksmen": {
+        "cred_ups": 0,
+        "range_ups": 0,
+        "credits": 100,
         "range": [
-          45,
+          40,
           45
         ]
+      },
+      "artillery": {
+        "cred_ups": 0,
+        "range_ups": 0,
+        "credits": 175,
+        "range": [
+          30,
+          35
+        ]
+      },
+      "infantry": {
+        "cred_ups": 0,
+        "range_ups": 0,
+        "credits": 50,
+        "range": [
+          50,
+          50
+        ]
       }
+    },
+    "stats": {
+      "wins": 0,
+      "losses": 0,
+      "gold": 0
     }
   }
 }

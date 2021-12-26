@@ -1,0 +1,22 @@
+Classes
+- Make your own Classes
+- Class store
+- More class features
+
+Attacks
+- Poison Attacks
+
+Ranking
+- Ranks based on wins
+- Badges
+- Special Rank Classes
+
+Actions on Turn
+- get soldiers
+- fix rage
+- get credits
+- skip Turn
+
+Gold
+- get gold on wins
+- shop
