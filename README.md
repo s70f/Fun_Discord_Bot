@@ -55,16 +55,16 @@ Gold can be obtained by winning duels. To calculate the amount of gold you get p
 ### Classes
 There are 4 main classes a player can choose from before they start a battle using `.main class <type>`. Players can also unlock classes by buying or getting achievements. Use `.market class` to see different classes available for purchase. Use `.main classes` to see all the classes you are able to choose from.
 
-#### Sniper
+#### Archer
 An elite killing squad. Start with 150 Credits and 35 to 40 soldiers. 
 
-#### Marksmen
+#### spearmen
 A band of ruthless soldiers who spray at any living thing. Start with 100 Credits and 40 to 45 soldiers. 
 
-#### Infantry
+#### soldier
 The infantry is specialized in combat on foot. Start with 50 Credits and 50 soldiers. 
 
-#### Artillery
+#### Knight
 Artillery is a class of heavy military ranged weapons built to launch munitions far beyond the range and power of infantry firearms. Start with 175 Credits and 30 to 35 soldiers.
 
 ## Next Phase
