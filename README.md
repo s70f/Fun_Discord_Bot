@@ -68,5 +68,8 @@ The infantry is specialized in combat on foot. Start with 50 Credits and 50 sold
 Artillery is a class of heavy military ranged weapons built to launch munitions far beyond the range and power of infantry firearms. Start with 175 Credits and 30 to 35 soldiers.
 
 ## Next Phase
-Make a credit system where you have to buy different types of soldiers and save credits and get credits for winning
+Make a credit system where you have to buy different types of soldiers and save credits and get credits for winning.
+Make a system to create your own class and upgrade existing ones.
+Make rare collectable abilities that can only be obtained once through tournaments or a market.
+Make black markets where people can sell their own things.
 
